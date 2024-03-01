@@ -95,10 +95,7 @@ afterEvaluate {
                 groupId = "com.github.dautovicharis"
                 artifactId = "UVCAndroid"
                 version = "1.0.0"
-                artifact(sourcesJar)
-                afterEvaluate {
-                    from(components["release"])
-                }
+                from(components["release"])
             }
         }
     }
