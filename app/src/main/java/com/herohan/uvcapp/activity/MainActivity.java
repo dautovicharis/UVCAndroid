@@ -491,9 +491,9 @@ public class MainActivity extends AppCompatActivity {
                 mBinding.fabVideo.setVisibility(View.VISIBLE);
 
                 // Update record button
-                int colorId = R.color.WHITE;
+                int colorId = R.color.white;
                 if (mIsRecording) {
-                    colorId = R.color.RED;
+                    colorId = R.color.red;
                 }
                 ColorStateList colorStateList = ColorStateList.valueOf(getResources().getColor(colorId));
                 mBinding.fabVideo.setSupportImageTintList(colorStateList);
