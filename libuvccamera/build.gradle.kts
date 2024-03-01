@@ -94,7 +94,7 @@ afterEvaluate {
             create<MavenPublication>("release") {
                 groupId = "com.github.dautovicharis"
                 artifactId = "UVCAndroid"
-                version = "1.0.0"
+                version = "1.0.1"
                 from(components["release"])
             }
         }
