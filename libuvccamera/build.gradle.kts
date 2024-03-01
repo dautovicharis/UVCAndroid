@@ -65,6 +65,13 @@ android {
     buildFeatures {
         buildConfig = true
     }
+
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+            withJavadocJar()
+        }
+    }
 }
 
 dependencies {
@@ -81,3 +88,31 @@ val sourcesJar by tasks.registering(Jar::class) {
     from(android.sourceSets.getByName("main").java.srcDirs)
 }
 
+afterEvaluate {
+    publishing {
+        publications {
+            create<MavenPublication>("release") {
+                groupId = "com.github.dautovicharis"
+                artifactId = "UVCAndroid"
+                version = "1.0.0"
+                artifact(sourcesJar)
+                afterEvaluate {
+                    from(components["release"])
+                }
+            }
+        }
+    }
+}
+
+
+tasks.register("listComponents") {
+    doLast {
+        println("Available components:")
+        if (project.components.isEmpty()) {
+            println("No components available.")
+        }
+        project.components.all {
+            println("Component name: $name")
+        }
+    }
+}
