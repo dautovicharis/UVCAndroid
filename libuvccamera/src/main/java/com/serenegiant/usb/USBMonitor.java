@@ -218,16 +218,25 @@ public final class USBMonitor {
             final Context context = mWeakContext.get();
             if (context != null) {
                 int flags = 0;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
                     // Up until Build.VERSION_CODES.R, PendingIntents are assumed to be mutable by default, unless FLAG_IMMUTABLE is set.
                     // Starting with Build.VERSION_CODES.S, it will be required to explicitly specify the mutability of PendingIntents on creation with either (@link #FLAG_IMMUTABLE} or FLAG_MUTABLE.
+                    flags = PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_ALLOW_UNSAFE_IMPLICIT_INTENT;
+                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                     flags = PendingIntent.FLAG_MUTABLE;
                 }
+
                 mPermissionIntent = PendingIntent.getBroadcast(context, 0, new Intent(ACTION_USB_PERMISSION), flags);
+
                 final IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
                 // ACTION_USB_DEVICE_ATTACHED never comes on some devices so it should not be added here
                 filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
-                context.registerReceiver(mUsbReceiver, filter);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    context.registerReceiver(mUsbReceiver, filter, Context.RECEIVER_EXPORTED);
+                } else {
+                    context.registerReceiver(mUsbReceiver, filter);
+                }
             }
             // start connection check
             mDetectedDeviceKeys.clear();
